@@ -1,0 +1,22 @@
+[project]
+name = "servevo-eval"
+version = "0.1.0"
+description = "Servevo 质检：客服会话质检评分（rubric + 缺失证据段）"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=1.2.9",
+    "langchain-core>=1.3.13",
+    "langchain-openai>=1.3.5",
+    "json-repair>=0.61.0",
+    "tenacity>=9.0.0",
+    "aiofiles>=23.0.0",
+]
+
+[project.scripts]
+servevo-eval = "servevo_eval.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["servevo_eval*"]
+
+[tool.setuptools.package-data]
+servevo_eval = ["prompts/*.st"]

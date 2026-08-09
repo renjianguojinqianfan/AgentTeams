@@ -1,0 +1,24 @@
+{
+  "session_id": "demo-session-002",
+  "context": "客户咨询星辰咖啡机K2故障与保修政策，坐席小星接待。",
+  "records": [
+    {
+      "question": "K2咖啡机漏水了怎么处理？",
+      "category": "故障处理",
+      "user_answer": "",
+      "record_id": "q1"
+    },
+    {
+      "question": "K2的保修期是多久？保内漏水免费修吗？",
+      "category": "保修",
+      "user_answer": "质保期内出现质量问题的话是可以免费维修的，具体保修期我帮您查一下。",
+      "record_id": "q2"
+    },
+    {
+      "question": "除垢后还是不出水呢？",
+      "category": "故障处理",
+      "user_answer": "那可能需要转人工处理了，我这边已经帮您记录了。",
+      "record_id": "q3"
+    }
+  ]
+}
