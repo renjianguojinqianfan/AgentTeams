@@ -1,0 +1,7 @@
+# 验证快照（答辩证据，不进 git —— AGENTS.md 红线）
+tmp/
+
+# Python 缓存
+__pycache__/
+*.pyc
+.pytest_cache/
