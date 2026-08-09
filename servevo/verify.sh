@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 # servevo 统一质量闸门（对应 PBH harness 的 `make verify`）。
 # 一键：4 模块单测全绿 + 密钥枯死检查 + 零侵入核对。
-# 用法: bash servevo/verify.sh
+# 用法: bash servevo/verify.sh [--fast]
+#   --fast: 仅单测（hook pre-commit / make test 用，跳过密钥与零侵入重量检查）
 set -euo pipefail
+
+FAST=0
+if [ "${1:-}" = "--fast" ] || [ "${1:-}" = "-f" ]; then
+    FAST=1
+fi
 
 # 固定用 interview-agent venv（宿主无 langgraph 等依赖）
 PY="${SERVEVO_PY:-E:/code/interview-agent/interview-agent-python/backend/.venv/Scripts/python.exe}"
@@ -25,6 +31,13 @@ MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/coach;$WROOT/eval;$WROOT/rag" "$PY" -
 
 echo "== 4/4 单测：audit =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/audit" "$PY" -m pytest "$WROOT/audit/tests" -q
+
+# 快速绊线模式（hook pre-commit / make test 用）：跳过密钥与零侵入重量检查
+if [ "$FAST" = "1" ] || [ "${SERVEVO_FAST:-0}" = "1" ]; then
+    echo ""
+    echo "✅ servevo 单测通过（快速模式）"
+    exit 0
+fi
 
 echo "== 密钥枯死检查（禁止硬编码 key）=="
 if grep -rnE "sk-[A-Za-z0-9]{16,}|AGENTTEAMS_LLM_API_KEY=[A-Za-z0-9]" "$ROOT" --include="*.py" --include="*.md" --include="*.sh" 2>/dev/null | grep -v "\.venv\|/tmp/\|\.pytest_cache" ; then

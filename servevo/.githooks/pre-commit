@@ -1,0 +1,4 @@
+#!/bin/sh
+# pre-commit: servevo 快速绊线（~10s）—— 仅 4 模块单测，跳过密钥/零侵入重量检查（下沉 pre-push）
+# 参考 interview-agent .githooks/pre-commit（快速绊线模式）
+powershell.exe -NoProfile -Command "bash servevo/verify.sh --fast; if (\$LASTEXITCODE -ne 0) { Write-Host 'servevo 单测失败，拒绝提交' -ForegroundColor Red; exit 1 }; Write-Host 'servevo 单测通过' -ForegroundColor Green"
