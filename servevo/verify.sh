@@ -46,14 +46,30 @@ if grep -rnE "sk-[A-Za-z0-9]{16,}|AGENTTEAMS_LLM_API_KEY=[A-Za-z0-9]" "$ROOT" --
 fi
 echo "无硬编码密钥 ✓"
 
-echo "== 零侵入核对（servevo/ 外官方文件不得被改动）=="
+echo "== 零侵入核对（servevo/ 外改动须登记于 .intrusion-record.md，见 ADR-003）=="
 cd "$ROOT/.."
-if [ -n "$(git status --short -- . ':!servevo' 2>/dev/null)" ]; then
-    echo "!! 检测到 servevo/ 外改动（违反零侵入红线）" >&2
-    git status --short -- . ':!servevo'
-    exit 1
+OUTSIDE="$(git status --short -- . ':!servevo' 2>/dev/null)"
+if [ -n "$OUTSIDE" ]; then
+    # 提取改动路径，检查是否已在侵入记录中登记
+    RECORD="$ROOT/.intrusion-record.md"
+    UNRECORDED=""
+    while IFS= read -r line; do
+        [ -z "$line" ] && continue
+        # 取路径字段（git status --short: "XY path"，含引号需剥离）
+        path="${line:3}"
+        path="${path#\"}"; path="${path%\"}"
+        if ! grep -qF "$path" "$RECORD" 2>/dev/null; then
+            UNRECORDED="$UNRECORDED\n  $line"
+        fi
+    done <<< "$OUTSIDE"
+    if [ -n "$UNRECORDED" ]; then
+        echo "!! 存在未登记的 servevo/ 外改动（违反 ADR-003）：" >&2
+        echo -e "$UNRECORDED" >&2
+        echo "!! 请先在 servevo/.intrusion-record.md 登记，或回退改动" >&2
+        exit 1
+    fi
 fi
-echo "零侵入 ✓"
+echo "零侵入核对通过（无未登记的 servevo/ 外改动）✓"
 
 echo ""
 echo "✅ servevo verify 全部通过"

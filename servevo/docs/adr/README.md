@@ -9,6 +9,7 @@
 |---|---|---|---|---|
 | [ADR-001](ADR-001-knowledge-consumption.md) | 知识消费方式：R（主动检索 references） | Accepted | 2026-08-09 | R vs C |
 | [ADR-002](ADR-002-worker-runtime.md) | Worker 接入：copaw 原生路线 | Accepted | 2026-08-09 | copaw+package vs 自定义镜像 |
+| [ADR-003](ADR-003-zero-intrusion-boundary.md) | 零侵入边界：默认策略 vs 可突破例外 | Accepted | 2026-08-09 | 硬红线 vs 可突破（Apache-2.0 允许修改） |
 
 ## 模板
 
