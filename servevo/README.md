@@ -9,8 +9,8 @@ GOAI 2026 · Agent Infra 新智基座赛道参赛作品增量目录。
 ```
 servevo/
 ├── README.md            本文件
-├── deploy/              team.yaml + 4 份 Worker YAML（leader/cs/qc/coach，共用同一镜像）
-├── image/               共用 Worker 镜像（entrypoint 读取 workspace 的 SOUL.md/AGENTS.md 定角色）
+├── deploy/              team.yaml + 4 份 Worker YAML（leader/cs/qc/coach，共用官方 copaw 镜像）
+├── image/               兜底预案（自定义镜像仅当需预装系统依赖时启用；默认不用，见 docs/P2.2）
 │   └── graphs/          迁移自底座的三图：rag / evaluation / adaptive
 ├── skills/              四类 Skill 包（各带独立评测入口 skill_test.py）
 │   ├── product-knowledge/
