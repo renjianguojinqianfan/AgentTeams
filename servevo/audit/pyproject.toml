@@ -1,0 +1,14 @@
+[project]
+name = "servevo-audit"
+version = "0.1.0"
+description = "Servevo 审计/台账：产物归档 + 审计链 + 指标 jsonl（MinIO 或本地等价）"
+requires-python = ">=3.11"
+dependencies = [
+    "boto3>=1.34.0",
+]
+
+[project.scripts]
+servevo-audit = "servevo_audit.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["servevo_audit*"]
