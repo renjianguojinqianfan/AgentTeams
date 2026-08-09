@@ -1,0 +1,16 @@
+[project]
+name = "servevo-rag"
+version = "0.1.0"
+description = "Servevo RAG：星辰咖啡机客服知识检索与应答（知识 Skill 包版）"
+requires-python = ">=3.11"
+dependencies = [
+    "langgraph>=1.2.9",
+    "langchain-core>=1.3.13",
+    "langchain-openai>=1.3.5",
+]
+
+[project.scripts]
+servevo-rag = "servevo_rag.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["servevo_rag*"]
