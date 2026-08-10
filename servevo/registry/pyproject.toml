@@ -1,0 +1,12 @@
+[project]
+name = "servevo-registry"
+version = "0.1.0"
+description = "Servevo 知识 Registry：version+label 寻址 + 发布/灰度/回滚 + 审批流（file:// 双轨 URI 抽象）"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+servevo-registry = "servevo_registry.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["servevo_registry*"]
