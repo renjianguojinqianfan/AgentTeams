@@ -1,0 +1,16 @@
+# servevo-leader Worker：协调官（分诊派单 / 触发进化 / 汇报）
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: servevo-leader
+spec:
+  runtime: copaw            # 官方 copaw 运行时（ADR-002 原生路线）
+  model: qwen3.7-flash      # 协调高频走 worker 档
+  identity:
+    name: 智服协调官
+    title: Team Leader 协调官
+  soul: servevo-leader-SOUL
+  agents:
+    - name: leader
+      role: team_leader
+      description: 分诊派单、触发进化闭环、汇报量化指标

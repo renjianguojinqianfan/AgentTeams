@@ -1,0 +1,16 @@
+# servevo-coach Worker：陪练官（陪练剧本 + 知识修订 + 回归测试）
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: servevo-coach
+spec:
+  runtime: copaw            # 官方 copaw 运行时（ADR-002）
+  model: qwen3.7-flash
+  identity:
+    name: 智服陪练官
+    title: 陪练官
+  soul: servevo-coach-SOUL
+  agents:
+    - name: coach
+      role: worker
+      description: 生成刁钻客户剧本重练主岗，产出知识修订草案，执行回归测试

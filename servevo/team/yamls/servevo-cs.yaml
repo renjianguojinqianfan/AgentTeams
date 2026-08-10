@@ -1,0 +1,16 @@
+# servevo-cs Worker：客服主岗（RAG 应答 + 高危审批）
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: servevo-cs
+spec:
+  runtime: copaw            # 官方 copaw 运行时（ADR-002）
+  model: qwen3.7-flash
+  identity:
+    name: 智服客服
+    title: 客服主岗
+  soul: servevo-cs-SOUL
+  agents:
+    - name: cs
+      role: worker
+      description: 检索知识应答客户，查不到转人工，高危操作发起审批

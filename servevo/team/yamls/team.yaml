@@ -1,0 +1,22 @@
+# servevo Team 定义：3 职能 + Leader（共用官方 copaw 镜像，平台原生声明式）
+# 对应规划 §4.1/4.2：workerMembers 恰一个 team_leader + 多个 worker；人类以 coordinator 加入
+apiVersion: agentteams.io/v1beta1
+kind: Team
+metadata:
+  name: servevo
+spec:
+  # 协调上下文：Leader 心跳 / 团队通信策略
+  coordinatorConfig:
+    leaderHeartbeat: "30m"
+  workerMembers:
+    - name: servevo-leader
+      role: team_leader
+    - name: servevo-cs
+      role: worker
+    - name: servevo-qc
+      role: worker
+    - name: servevo-coach
+      role: worker
+  humanMembers:
+    - name: zhiru
+      role: coordinator

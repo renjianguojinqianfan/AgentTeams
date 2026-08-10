@@ -1,0 +1,16 @@
+# servevo-qc Worker：质检·审批官（抽检评分 + 高危/知识变更审批）
+apiVersion: agentteams.io/v1beta1
+kind: Worker
+metadata:
+  name: servevo-qc
+spec:
+  runtime: copaw            # 官方 copaw 运行时（ADR-002）
+  model: qwen3.7-flash
+  identity:
+    name: 智服质检官
+    title: 质检·审批官
+  soul: servevo-qc-SOUL
+  agents:
+    - name: qc
+      role: worker
+      description: 按 qc-standard rubric 抽检评分，审批高危操作与知识变更，守可信闭环

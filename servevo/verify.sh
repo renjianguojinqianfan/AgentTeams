@@ -44,6 +44,9 @@ echo "== Skills 评测入口（四类 SKILL.md + skill_test）=="
 "$PY" "$WROOT/skills/coach-scenario/skill_test.py"
 "$PY" "$WROOT/skills/regression-verify/skill_test.py"
 
+echo "== Team 配置校验（team + 4 worker + SOUL）=="
+"$PY" "$WROOT/team/yamls/validate_team.py"
+
 # 快速绊线模式（hook pre-commit / make test 用）：跳过密钥与零侵入重量检查
 if [ "$FAST" = "1" ] || [ "${SERVEVO_FAST:-0}" = "1" ]; then
     echo ""
