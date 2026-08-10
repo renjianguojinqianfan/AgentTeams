@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # servevo 统一质量闸门（对应 PBH harness 的 `make verify`）。
-# 一键：4 模块单测全绿 + 密钥枯死检查 + 零侵入核对。
+# 一键：7 模块单测全绿 + Skills 评测 + Team 校验 + 密钥枯死检查 + 零侵入核对。
 # 用法: bash servevo/verify.sh [--fast]
-#   --fast: 仅单测（hook pre-commit / make test 用，跳过密钥与零侵入重量检查）
+#   --fast: 仅单测（hook pre-commit / make test 用，跳过重量检查）
 set -euo pipefail
 
 FAST=0
@@ -20,23 +20,26 @@ else
     WROOT="$ROOT"
 fi
 
-echo "== 1/4 单测：rag =="
+echo "== 1/7 单测：rag =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/rag" "$PY" -m pytest "$WROOT/rag/tests" -q
 
-echo "== 2/4 单测：eval =="
+echo "== 2/7 单测：eval =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/eval;$WROOT/rag" "$PY" -m pytest "$WROOT/eval/tests" -q
 
-echo "== 3/4 单测：coach =="
+echo "== 3/7 单测：coach =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/coach;$WROOT/eval;$WROOT/rag" "$PY" -m pytest "$WROOT/coach/tests" -q
 
-echo "== 4/5 单测：audit =="
+echo "== 4/7 单测：audit =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/audit" "$PY" -m pytest "$WROOT/audit/tests" -q
 
-echo "== 5/6 单测：regression =="
+echo "== 5/7 单测：regression =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/regression;$WROOT/rag;$WROOT/eval" "$PY" -m pytest "$WROOT/regression/tests" -q
 
-echo "== 6/6 单测：registry =="
+echo "== 6/7 单测：registry =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/registry" "$PY" -m pytest "$WROOT/registry/tests" -q
+
+echo "== 7/7 单测：observability =="
+MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/observability" "$PY" -m pytest "$WROOT/observability/tests" -q
 
 echo "== Skills 评测入口（四类 SKILL.md + skill_test）=="
 "$PY" "$WROOT/skills/skill_test.py"

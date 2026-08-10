@@ -18,8 +18,7 @@ class TestQuestion:
     question: str
     answer: str
     key_points: list[str]
-    expected_pass: bool
-    gap: bool = False
+    gap: bool = False   # 预埋缺口题：知识已更新但当前版本未同步 → v1 应失败
 
 
 @dataclass(frozen=True)
@@ -52,7 +51,6 @@ def load_testset(path: str | Path) -> TestSet:
             question=q["question"],
             answer=q["answer"],
             key_points=list(q.get("key_points", [])),
-            expected_pass=bool(q.get("expected_pass", True)),
             gap=bool(q.get("gap", False)),
         )
         for q in data.get("questions", [])
@@ -66,13 +64,9 @@ def load_testset(path: str | Path) -> TestSet:
 
 
 def validate(ts: TestSet) -> list[str]:
-    """校验测试集约束：总数、id 唯一、expected_pass 一致性、缺口题标记。"""
+    """校验测试集约束：总数、id 唯一、缺口题标记。"""
     issues: list[str] = []
     ids = [q.id for q in ts.questions]
     if len(ids) != len(set(ids)):
         issues.append("存在重复 id")
-    gaps = [q for q in ts.questions if q.gap]
-    non_gap_fail = [q.id for q in ts.questions if not q.expected_pass and not q.gap]
-    if non_gap_fail:
-        issues.append(f"非缺口题不应 expected_pass=False: {non_gap_fail}")
     return issues

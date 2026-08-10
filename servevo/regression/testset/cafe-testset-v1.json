@@ -5,60 +5,542 @@
     "industry": "咖啡机客服",
     "knowledge_ref": "product-knowledge/v1",
     "total": 50,
-    "categories": ["产品", "保修", "退换货", "政策", "故障"],
+    "categories": [
+      "产品",
+      "保修",
+      "退换货",
+      "政策",
+      "故障"
+    ],
     "gap_questions": 5,
     "description": "星辰咖啡机 50 题预置测试集（含预埋缺口题：政策已更新但 v1 知识未同步）"
   },
   "questions": [
-    {"id": "P01", "category": "产品", "question": "K1 咖啡机的价格是多少？", "answer": "¥1999", "key_points": ["价格 1999"], "expected_pass": true, "gap": false},
-    {"id": "P02", "category": "产品", "question": "K2 咖啡机的价格是多少？", "answer": "¥3299", "key_points": ["价格 3299"], "expected_pass": true, "gap": false},
-    {"id": "P03", "category": "产品", "question": "K1 的水箱容量是多大？", "answer": "1.2L", "key_points": ["1.2L"], "expected_pass": true, "gap": false},
-    {"id": "P04", "category": "产品", "question": "K2 的水箱容量是多大？", "answer": "2.0L", "key_points": ["2.0L"], "expected_pass": true, "gap": false},
-    {"id": "P05", "category": "产品", "question": "K1 的萃取压力是多少 bar？", "answer": "15 bar", "key_points": ["15 bar"], "expected_pass": true, "gap": false},
-    {"id": "P06", "category": "产品", "question": "K2 的萃取压力是多少 bar？", "answer": "19 bar", "key_points": ["19 bar"], "expected_pass": true, "gap": false},
-    {"id": "P07", "category": "产品", "question": "K1 和 K2 分别在加热方式上有什么不同？", "answer": "K1 单锅炉 92°C 恒温；K2 双锅炉 92°C/120°C", "key_points": ["单锅炉", "双锅炉"], "expected_pass": true, "gap": false},
-    {"id": "P08", "category": "产品", "question": "K2 适合什么样的使用场景？", "answer": "家用全自动，一键美式/拿铁/卡布，带自清洁", "key_points": ["全自动", "自清洁"], "expected_pass": true, "gap": false},
-    {"id": "P09", "category": "产品", "question": "咖啡粉勺多少钱？", "answer": "¥29", "key_points": ["29"], "expected_pass": true, "gap": false},
-    {"id": "P10", "category": "产品", "question": "专用除垢剂多少钱？", "answer": "¥59", "key_points": ["59"], "expected_pass": true, "gap": false},
-    {"id": "W01", "category": "保修", "question": "星辰咖啡机的整机保修期是多久？", "answer": "1 年（自签收之日起算）", "key_points": ["1 年"], "expected_pass": true, "gap": false},
-    {"id": "W02", "category": "保修", "question": "保修期内非人为故障怎么处理？", "answer": "免费维修，往返运费由星辰承担", "key_points": ["免费维修", "运费星辰承担"], "expected_pass": true, "gap": false},
-    {"id": "W03", "category": "保修", "question": "保修需要什么凭证？", "answer": "购机订单号或发票；丢失可凭机身序列号官方渠道查询", "key_points": ["订单号/发票", "序列号"], "expected_pass": true, "gap": false},
-    {"id": "W04", "category": "保修", "question": "人为摔落导致的损坏保修吗？", "answer": "不保修（人为损坏），属不在保修范围", "key_points": ["人为损坏不保修"], "expected_pass": true, "gap": false},
-    {"id": "W05", "category": "保修", "question": "超过保修期可以维修吗？费用怎么算？", "answer": "可以维修，但不在保修范围，需付费", "key_points": ["可维修", "付费"], "expected_pass": true, "gap": false},
-    {"id": "W06", "category": "保修", "question": "自己改装过的机器还在保修范围吗？", "answer": "不在（未按说明书/人为改装），不保修", "key_points": ["改装不保修"], "expected_pass": true, "gap": false},
-    {"id": "W07", "category": "保修", "question": "进水导致的故障保修吗？", "answer": "不保修（人为损坏进水）", "key_points": ["进水不保修"], "expected_pass": true, "gap": false},
-    {"id": "W08", "category": "保修", "question": "保修凭证丢了还能享受保修吗？", "answer": "可以，凭机身序列号在官方渠道查询", "key_points": ["序列号查询"], "expected_pass": true, "gap": false},
-    {"id": "W09", "category": "保修", "question": "使用非原装配件导致的故障保修吗？", "answer": "不保修（使用非原装配件属人为损害）", "key_points": ["非原装配件不保修"], "expected_pass": true, "gap": false},
-    {"id": "W10", "category": "保修", "question": "保修期内维修的往返运费谁承担？", "answer": "星辰承担", "key_points": ["星辰承担"], "expected_pass": true, "gap": false},
-    {"id": "R01", "category": "退换货", "question": "7 天无理由退货的条件是什么？", "answer": "签收后 7 天内，未使用、包装完好，运费客户承担", "key_points": ["7 天", "未使用包装完好", "运费客户承担"], "expected_pass": true, "gap": false},
-    {"id": "R02", "category": "退换货", "question": "15 天质量问题换新的条件是什么？", "answer": "签收后 15 天内出现性能故障，经售后确认免费换新", "key_points": ["15 天", "性能故障", "免费换新"], "expected_pass": true, "gap": false},
-    {"id": "R03", "category": "退换货", "question": "定制配件可以退换吗？", "answer": "定制/赠品配件不参与退换", "key_points": ["定制不参与"], "expected_pass": true, "gap": false},
-    {"id": "R04", "category": "退换货", "question": "赠品配件能退货吗？", "answer": "不能，赠品配件不参与退换", "key_points": ["赠品不参与"], "expected_pass": true, "gap": false},
-    {"id": "R05", "category": "退换货", "question": "7 天无理由退货谁承担运费？", "answer": "客户承担", "key_points": ["客户承担"], "expected_pass": true, "gap": false},
-    {"id": "R06", "category": "退换货", "question": "15 天质量问题换新要收费吗？", "answer": "免费换新", "key_points": ["免费"], "expected_pass": true, "gap": false},
-    {"id": "R07", "category": "退换货", "question": "已使用过的机器能 7 天无理由退货吗？", "answer": "不能，需未使用", "key_points": ["未使用"], "expected_pass": true, "gap": false},
-    {"id": "R08", "category": "退换货", "question": "15 天换新需要什么确认？", "answer": "经售后确认属性能故障", "key_points": ["售后确认"], "expected_pass": true, "gap": false},
-    {"id": "R09", "category": "退换货", "question": "包装已拆但未使用，7 天内能退吗？", "answer": "包装完好可退（未使用+包装完好），运费客户承担", "key_points": ["包装完好可退"], "expected_pass": true, "gap": false},
-    {"id": "R10", "category": "退换货", "question": "退换货政策中'定制配件'指什么？", "answer": "不参与退换的定制/赠品配件", "key_points": ["定制配件不参与"], "expected_pass": true, "gap": false},
-    {"id": "F01", "category": "故障", "question": "咖啡机不出水或流速极慢怎么办？", "answer": "检查水箱水位→断电重启→仍不行执行除垢程序（每3个月或300杯一次）", "key_points": ["查水位", "断电重启", "除垢"], "expected_pass": true, "gap": false},
-    {"id": "F02", "category": "故障", "question": "咖啡机漏水怎么处理？", "answer": "重装水箱（听到卡扣声）→检查萃取头密封→确认蒸汽棒关闭；仍漏→转人工申请保修", "key_points": ["重装水箱", "检查密封", "转人工"], "expected_pass": true, "gap": false},
-    {"id": "F03", "category": "故障", "question": "咖啡味道偏淡或没油脂是怎么回事？", "answer": "粉量不足/研磨偏粗/水粉比不当；K1 建议粉量18g 研磨中细，K2 先执行清洗程序", "key_points": ["粉量/研磨/水粉比", "K1 18g", "K2 清洗"], "expected_pass": true, "gap": false},
-    {"id": "F04", "category": "故障", "question": "电源灯不亮无法开机怎么排查？", "answer": "换插座测试→检查电源线→仍无法开机转人工申请保修", "key_points": ["换插座", "查电源线", "转人工"], "expected_pass": true, "gap": false},
-    {"id": "F05", "category": "故障", "question": "蒸汽棒不出蒸汽怎么处理？", "answer": "K1 先切蒸汽模式等待预热；K2 检查水位", "key_points": ["K1 蒸汽模式", "K2 水位"], "expected_pass": true, "gap": false},
-    {"id": "F06", "category": "故障", "question": "多久除垢一次？", "answer": "每 3 个月一次或每 300 杯一次", "key_points": ["3 个月", "300 杯"], "expected_pass": true, "gap": false},
-    {"id": "F07", "category": "故障", "question": "除垢后仍不出水怎么办？", "answer": "转人工，说明已尝试补水和除垢", "key_points": ["转人工", "说明已尝试"], "expected_pass": true, "gap": false},
-    {"id": "F08", "category": "故障", "question": "K1 建议多少粉量？", "answer": "18g，研磨中细", "key_points": ["18g", "中细"], "expected_pass": true, "gap": false},
-    {"id": "F09", "category": "故障", "question": "漏水后仍漏水申请保修属什么情况？", "answer": "属质量问题则免费维修（可申请保修）", "key_points": ["质量问题免费修"], "expected_pass": true, "gap": false},
-    {"id": "F10", "category": "故障", "question": "K2 全自动咖啡味道淡建议先做什么？", "answer": "先执行一次清洗程序再试", "key_points": ["清洗程序"], "expected_pass": true, "gap": false},
-    {"id": "R11", "category": "政策", "question": "官方对故障机器的售后确认流程是什么？", "answer": "经售后确认：7 天无理由退货 / 15 天质量问题换新", "key_points": ["售后确认", "7 天退", "15 天换"], "expected_pass": true, "gap": false},
-    {"id": "R12", "category": "政策", "question": "保修期内维修的运费政策是什么？", "answer": "非人为故障免费维修，往返运费星辰承担", "key_points": ["星辰承担运费"], "expected_pass": true, "gap": false},
-    {"id": "R13", "category": "政策", "question": "机器刚到货就发现性能故障怎么办？", "answer": "15 天内经售后确认可免费换新", "key_points": ["15 天", "免费换新"], "expected_pass": true, "gap": false},
-    {"id": "R14", "category": "政策", "question": "客户对退换货有疑问应引导到哪？", "answer": "按保修/退换货政策说明，必要时转人工售后确认", "key_points": ["政策说明", "转人工"], "expected_pass": true, "gap": false},
-    {"id": "R15", "category": "政策", "question": "退换货政策中运费承担的总原则是什么？", "answer": "7 天无理由退货客户承担；15 天质量问题换新免费", "key_points": ["无理由客户承担", "质量问题免费"], "expected_pass": true, "gap": false},
-    {"id": "G01", "category": "政策", "question": "整机保修期现在延长到多久了？", "answer": "2 年（2026 年新政策，v1 知识未同步）", "key_points": ["2 年"], "expected_pass": true, "gap": true},
-    {"id": "G02", "category": "政策", "question": "现在的退换货政策是几天无理由了？", "answer": "从 7 天延长到 15 天无理由（2026 新政策）", "key_points": ["15 天无理由"], "expected_pass": true, "gap": true},
-    {"id": "G03", "category": "政策", "question": "现在非人为故障的运费谁承担？", "answer": "2026 新政策：双向运费均由星辰承担（v1 为往返）", "key_points": ["双向均星辰"], "expected_pass": true, "gap": true},
-    {"id": "G04", "category": "政策", "question": "K2 现在支持以旧换新补贴吗？", "answer": "支持，补贴 ¥300（2026 新政策，v1 未收录）", "key_points": ["以旧换新 300"], "expected_pass": true, "gap": true},
-    {"id": "G05", "category": "政策", "question": "现在滤纸还参与满减活动吗？", "answer": "参与，买 3 送 1（2026 新政策）", "key_points": ["买 3 送 1"], "expected_pass": true, "gap": true}
+    {
+      "id": "P01",
+      "category": "产品",
+      "question": "K1 咖啡机的价格是多少？",
+      "answer": "¥1999",
+      "key_points": [
+        "价格 1999"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P02",
+      "category": "产品",
+      "question": "K2 咖啡机的价格是多少？",
+      "answer": "¥3299",
+      "key_points": [
+        "价格 3299"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P03",
+      "category": "产品",
+      "question": "K1 的水箱容量是多大？",
+      "answer": "1.2L",
+      "key_points": [
+        "1.2L"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P04",
+      "category": "产品",
+      "question": "K2 的水箱容量是多大？",
+      "answer": "2.0L",
+      "key_points": [
+        "2.0L"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P05",
+      "category": "产品",
+      "question": "K1 的萃取压力是多少 bar？",
+      "answer": "15 bar",
+      "key_points": [
+        "15 bar"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P06",
+      "category": "产品",
+      "question": "K2 的萃取压力是多少 bar？",
+      "answer": "19 bar",
+      "key_points": [
+        "19 bar"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P07",
+      "category": "产品",
+      "question": "K1 和 K2 分别在加热方式上有什么不同？",
+      "answer": "K1 单锅炉 92°C 恒温；K2 双锅炉 92°C/120°C",
+      "key_points": [
+        "单锅炉",
+        "双锅炉"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P08",
+      "category": "产品",
+      "question": "K2 适合什么样的使用场景？",
+      "answer": "家用全自动，一键美式/拿铁/卡布，带自清洁",
+      "key_points": [
+        "全自动",
+        "自清洁"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P09",
+      "category": "产品",
+      "question": "咖啡粉勺多少钱？",
+      "answer": "¥29",
+      "key_points": [
+        "29"
+      ],
+      "gap": false
+    },
+    {
+      "id": "P10",
+      "category": "产品",
+      "question": "专用除垢剂多少钱？",
+      "answer": "¥59",
+      "key_points": [
+        "59"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W01",
+      "category": "保修",
+      "question": "星辰咖啡机的整机保修期是多久？",
+      "answer": "1 年（自签收之日起算）",
+      "key_points": [
+        "1 年"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W02",
+      "category": "保修",
+      "question": "保修期内非人为故障怎么处理？",
+      "answer": "免费维修，往返运费由星辰承担",
+      "key_points": [
+        "免费维修",
+        "运费星辰承担"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W03",
+      "category": "保修",
+      "question": "保修需要什么凭证？",
+      "answer": "购机订单号或发票；丢失可凭机身序列号官方渠道查询",
+      "key_points": [
+        "订单号/发票",
+        "序列号"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W04",
+      "category": "保修",
+      "question": "人为摔落导致的损坏保修吗？",
+      "answer": "不保修（人为损坏），属不在保修范围",
+      "key_points": [
+        "人为损坏不保修"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W05",
+      "category": "保修",
+      "question": "超过保修期可以维修吗？费用怎么算？",
+      "answer": "可以维修，但不在保修范围，需付费",
+      "key_points": [
+        "可维修",
+        "付费"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W06",
+      "category": "保修",
+      "question": "自己改装过的机器还在保修范围吗？",
+      "answer": "不在（未按说明书/人为改装），不保修",
+      "key_points": [
+        "改装不保修"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W07",
+      "category": "保修",
+      "question": "进水导致的故障保修吗？",
+      "answer": "不保修（人为损坏进水）",
+      "key_points": [
+        "进水不保修"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W08",
+      "category": "保修",
+      "question": "保修凭证丢了还能享受保修吗？",
+      "answer": "可以，凭机身序列号在官方渠道查询",
+      "key_points": [
+        "序列号查询"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W09",
+      "category": "保修",
+      "question": "使用非原装配件导致的故障保修吗？",
+      "answer": "不保修（使用非原装配件属人为损害）",
+      "key_points": [
+        "非原装配件不保修"
+      ],
+      "gap": false
+    },
+    {
+      "id": "W10",
+      "category": "保修",
+      "question": "保修期内维修的往返运费谁承担？",
+      "answer": "星辰承担",
+      "key_points": [
+        "星辰承担"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R01",
+      "category": "退换货",
+      "question": "7 天无理由退货的条件是什么？",
+      "answer": "签收后 7 天内，未使用、包装完好，运费客户承担",
+      "key_points": [
+        "7 天",
+        "未使用包装完好",
+        "运费客户承担"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R02",
+      "category": "退换货",
+      "question": "15 天质量问题换新的条件是什么？",
+      "answer": "签收后 15 天内出现性能故障，经售后确认免费换新",
+      "key_points": [
+        "15 天",
+        "性能故障",
+        "免费换新"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R03",
+      "category": "退换货",
+      "question": "定制配件可以退换吗？",
+      "answer": "定制/赠品配件不参与退换",
+      "key_points": [
+        "定制不参与"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R04",
+      "category": "退换货",
+      "question": "赠品配件能退货吗？",
+      "answer": "不能，赠品配件不参与退换",
+      "key_points": [
+        "赠品不参与"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R05",
+      "category": "退换货",
+      "question": "7 天无理由退货谁承担运费？",
+      "answer": "客户承担",
+      "key_points": [
+        "客户承担"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R06",
+      "category": "退换货",
+      "question": "15 天质量问题换新要收费吗？",
+      "answer": "免费换新",
+      "key_points": [
+        "免费"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R07",
+      "category": "退换货",
+      "question": "已使用过的机器能 7 天无理由退货吗？",
+      "answer": "不能，需未使用",
+      "key_points": [
+        "未使用"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R08",
+      "category": "退换货",
+      "question": "15 天换新需要什么确认？",
+      "answer": "经售后确认属性能故障",
+      "key_points": [
+        "售后确认"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R09",
+      "category": "退换货",
+      "question": "包装已拆但未使用，7 天内能退吗？",
+      "answer": "包装完好可退（未使用+包装完好），运费客户承担",
+      "key_points": [
+        "包装完好可退"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R10",
+      "category": "退换货",
+      "question": "退换货政策中'定制配件'指什么？",
+      "answer": "不参与退换的定制/赠品配件",
+      "key_points": [
+        "定制配件不参与"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F01",
+      "category": "故障",
+      "question": "咖啡机不出水或流速极慢怎么办？",
+      "answer": "检查水箱水位→断电重启→仍不行执行除垢程序（每3个月或300杯一次）",
+      "key_points": [
+        "查水位",
+        "断电重启",
+        "除垢"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F02",
+      "category": "故障",
+      "question": "咖啡机漏水怎么处理？",
+      "answer": "重装水箱（听到卡扣声）→检查萃取头密封→确认蒸汽棒关闭；仍漏→转人工申请保修",
+      "key_points": [
+        "重装水箱",
+        "检查密封",
+        "转人工"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F03",
+      "category": "故障",
+      "question": "咖啡味道偏淡或没油脂是怎么回事？",
+      "answer": "粉量不足/研磨偏粗/水粉比不当；K1 建议粉量18g 研磨中细，K2 先执行清洗程序",
+      "key_points": [
+        "粉量/研磨/水粉比",
+        "K1 18g",
+        "K2 清洗"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F04",
+      "category": "故障",
+      "question": "电源灯不亮无法开机怎么排查？",
+      "answer": "换插座测试→检查电源线→仍无法开机转人工申请保修",
+      "key_points": [
+        "换插座",
+        "查电源线",
+        "转人工"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F05",
+      "category": "故障",
+      "question": "蒸汽棒不出蒸汽怎么处理？",
+      "answer": "K1 先切蒸汽模式等待预热；K2 检查水位",
+      "key_points": [
+        "K1 蒸汽模式",
+        "K2 水位"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F06",
+      "category": "故障",
+      "question": "多久除垢一次？",
+      "answer": "每 3 个月一次或每 300 杯一次",
+      "key_points": [
+        "3 个月",
+        "300 杯"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F07",
+      "category": "故障",
+      "question": "除垢后仍不出水怎么办？",
+      "answer": "转人工，说明已尝试补水和除垢",
+      "key_points": [
+        "转人工",
+        "说明已尝试"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F08",
+      "category": "故障",
+      "question": "K1 建议多少粉量？",
+      "answer": "18g，研磨中细",
+      "key_points": [
+        "18g",
+        "中细"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F09",
+      "category": "故障",
+      "question": "漏水后仍漏水申请保修属什么情况？",
+      "answer": "属质量问题则免费维修（可申请保修）",
+      "key_points": [
+        "质量问题免费修"
+      ],
+      "gap": false
+    },
+    {
+      "id": "F10",
+      "category": "故障",
+      "question": "K2 全自动咖啡味道淡建议先做什么？",
+      "answer": "先执行一次清洗程序再试",
+      "key_points": [
+        "清洗程序"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R11",
+      "category": "政策",
+      "question": "官方对故障机器的售后确认流程是什么？",
+      "answer": "经售后确认：7 天无理由退货 / 15 天质量问题换新",
+      "key_points": [
+        "售后确认",
+        "7 天退",
+        "15 天换"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R12",
+      "category": "政策",
+      "question": "保修期内维修的运费政策是什么？",
+      "answer": "非人为故障免费维修，往返运费星辰承担",
+      "key_points": [
+        "星辰承担运费"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R13",
+      "category": "政策",
+      "question": "机器刚到货就发现性能故障怎么办？",
+      "answer": "15 天内经售后确认可免费换新",
+      "key_points": [
+        "15 天",
+        "免费换新"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R14",
+      "category": "政策",
+      "question": "客户对退换货有疑问应引导到哪？",
+      "answer": "按保修/退换货政策说明，必要时转人工售后确认",
+      "key_points": [
+        "政策说明",
+        "转人工"
+      ],
+      "gap": false
+    },
+    {
+      "id": "R15",
+      "category": "政策",
+      "question": "退换货政策中运费承担的总原则是什么？",
+      "answer": "7 天无理由退货客户承担；15 天质量问题换新免费",
+      "key_points": [
+        "无理由客户承担",
+        "质量问题免费"
+      ],
+      "gap": false
+    },
+    {
+      "id": "G01",
+      "category": "政策",
+      "question": "整机保修期现在延长到多久了？",
+      "answer": "2 年（2026 年新政策，v1 知识未同步）",
+      "key_points": [
+        "2 年"
+      ],
+      "gap": true
+    },
+    {
+      "id": "G02",
+      "category": "政策",
+      "question": "现在的退换货政策是几天无理由了？",
+      "answer": "从 7 天延长到 15 天无理由（2026 新政策）",
+      "key_points": [
+        "15 天无理由"
+      ],
+      "gap": true
+    },
+    {
+      "id": "G03",
+      "category": "政策",
+      "question": "现在非人为故障的运费谁承担？",
+      "answer": "2026 新政策：双向运费均由星辰承担（v1 为往返）",
+      "key_points": [
+        "双向均星辰"
+      ],
+      "gap": true
+    },
+    {
+      "id": "G04",
+      "category": "政策",
+      "question": "K2 现在支持以旧换新补贴吗？",
+      "answer": "支持，补贴 ¥300（2026 新政策，v1 未收录）",
+      "key_points": [
+        "以旧换新 300"
+      ],
+      "gap": true
+    },
+    {
+      "id": "G05",
+      "category": "政策",
+      "question": "现在滤纸还参与满减活动吗？",
+      "answer": "参与，买 3 送 1（2026 新政策）",
+      "key_points": [
+        "买 3 送 1"
+      ],
+      "gap": true
+    }
   ]
 }

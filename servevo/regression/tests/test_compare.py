@@ -22,13 +22,12 @@ def test_validate_no_issues():
     assert validate(ts) == []
 
 
-def test_validate_duplicate_and_non_gap_fail():
-    q1 = TestQuestion("A", "产品", "q", "a", [], True)
-    q2 = TestQuestion("A", "产品", "q2", "a", [], False)
+def test_validate_duplicate():
+    q1 = TestQuestion(id="A", category="产品", question="q", answer="a", key_points=[], gap=False)
+    q2 = TestQuestion(id="A", category="产品", question="q2", answer="a", key_points=[], gap=False)
     ts = TestSet("t", "1", "kb", [q1, q2])
     issues = validate(ts)
     assert any("重复" in i for i in issues)
-    assert any("expected_pass" in i for i in issues)
 
 
 def test_compare_evolution_ok():
