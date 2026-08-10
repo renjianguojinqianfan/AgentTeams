@@ -38,6 +38,12 @@ MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/regression;$WROOT/rag;$WROOT/eval" "$
 echo "== 6/6 单测：registry =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/registry" "$PY" -m pytest "$WROOT/registry/tests" -q
 
+echo "== Skills 评测入口（四类 SKILL.md + skill_test）=="
+"$PY" "$WROOT/skills/skill_test.py"
+"$PY" "$WROOT/skills/qc-standard/skill_test.py"
+"$PY" "$WROOT/skills/coach-scenario/skill_test.py"
+"$PY" "$WROOT/skills/regression-verify/skill_test.py"
+
 # 快速绊线模式（hook pre-commit / make test 用）：跳过密钥与零侵入重量检查
 if [ "$FAST" = "1" ] || [ "${SERVEVO_FAST:-0}" = "1" ]; then
     echo ""
