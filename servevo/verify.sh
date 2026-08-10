@@ -29,8 +29,11 @@ MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/eval;$WROOT/rag" "$PY" -m pytest "$WR
 echo "== 3/4 单测：coach =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/coach;$WROOT/eval;$WROOT/rag" "$PY" -m pytest "$WROOT/coach/tests" -q
 
-echo "== 4/4 单测：audit =="
+echo "== 4/5 单测：audit =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/audit" "$PY" -m pytest "$WROOT/audit/tests" -q
+
+echo "== 5/5 单测：regression =="
+MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/regression;$WROOT/rag;$WROOT/eval" "$PY" -m pytest "$WROOT/regression/tests" -q
 
 # 快速绊线模式（hook pre-commit / make test 用）：跳过密钥与零侵入重量检查
 if [ "$FAST" = "1" ] || [ "${SERVEVO_FAST:-0}" = "1" ]; then
