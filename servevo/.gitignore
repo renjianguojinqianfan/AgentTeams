@@ -1,6 +1,9 @@
 # 验证快照（答辩证据，不进 git —— AGENTS.md 红线）
 tmp/
 
+# 票据/交接区（issue-tracker local markdown，不随代码提交）
+.scratch/
+
 # Python 缓存
 __pycache__/
 *.pyc
