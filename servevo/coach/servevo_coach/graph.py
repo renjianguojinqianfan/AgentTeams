@@ -31,7 +31,7 @@ from servevo_eval.errors import ErrorCode
 from servevo_eval.structured_output import LLMStructuredInvoker
 
 from .entities import CoachReport, KnowledgeRevision, ScenarioRecord
-from .strategy import should_end_session
+from .strategy import build_knowledge_revisions, should_end_session
 from .tools import (
     COACH_TOOLS,
     CoachToolContext,
@@ -417,6 +417,21 @@ class CoachGraph:
         regression_passed = sum(1 for q in qa_history if (q.get("score") or 0) >= 7) if mode == "regression" else 0
         regression_total = len(qa_history) if mode == "regression" else 0
 
+        # 知识修订草案（确定性：陪练低分题 → 知识缺口草案，供 servevo-qc 审批）
+        revisions_raw = build_knowledge_revisions(qa_history)
+        knowledge_revisions = [
+            KnowledgeRevision(
+                skill_id=r.skill_id,
+                category=r.category,
+                change_type=r.change_type,
+                target_section=r.target_section,
+                proposed_content=r.proposed_content,
+                reason=r.reason,
+                reference=f"session/{state.get('session_id', '')}",
+            )
+            for r in revisions_raw
+        ]
+
         report = CoachReport(
             session_id=state.get("session_id", ""),
             mode=mode,
@@ -425,7 +440,7 @@ class CoachGraph:
             scenarios=scenarios,
             strengths=[],
             improvements=[],
-            knowledge_revisions=[],
+            knowledge_revisions=knowledge_revisions,
             decision_trace=list(state.get("decision_trace", [])),
             regression_passed=regression_passed,
             regression_total=regression_total,

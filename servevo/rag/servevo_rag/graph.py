@@ -34,7 +34,6 @@ logger = logging.getLogger(__name__)
 
 _MAX_RETRIES = 2
 _MIN_CHUNKS_THRESHOLD = 2
-_MIN_SCORE_THRESHOLD = 0.5
 # 真实质量门：query 词在检索结果中的最低覆盖率（弥补归一化 score 恒最高为 1.0 的失真）
 _MIN_OVERLAP_THRESHOLD = 0.3
 _SEARCH_TIMEOUT = 30

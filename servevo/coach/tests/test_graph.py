@@ -71,3 +71,29 @@ async def test_coach_regression_empty():
     report = await graph.run(FakeLlm(), invoker, "reg3", mode="regression", regression_cases=[])
     assert report.regression_total == 0
     assert report.overall_score == 0
+
+
+@pytest.mark.asyncio
+async def test_coach_regression_generates_knowledge_revisions():
+    """陪练低分题应产出知识修订草案（进化闭环'陪练→知识修订'环节）。"""
+    graph = CoachGraph(kb_dir=str(KB))
+    # 一题低分（<4）→ 应产出修订草案
+    invoker = FakeInvoker([3, 9, 7])
+    report = await graph.run(FakeLlm(), invoker, "reg4", mode="regression", regression_cases=CASES)
+    assert report.knowledge_revisions, "低分题应产出知识修订草案"
+    rev = report.knowledge_revisions[0]
+    assert rev.skill_id == "product-knowledge"
+    assert rev.change_type == "UPDATE"
+    assert rev.category == "故障处理"
+    assert rev.target_section == "faq"
+    assert rev.reason
+    assert rev.reference and "reg4" in rev.reference
+
+
+@pytest.mark.asyncio
+async def test_coach_regression_all_pass_no_revisions():
+    """全高分（>=4）不产出修订草案。"""
+    graph = CoachGraph(kb_dir=str(KB))
+    invoker = FakeInvoker([8, 9, 7])
+    report = await graph.run(FakeLlm(), invoker, "reg5", mode="regression", regression_cases=CASES)
+    assert report.knowledge_revisions == []

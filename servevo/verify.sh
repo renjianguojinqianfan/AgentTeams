@@ -42,10 +42,13 @@ echo "== 7/7 单测：observability =="
 MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/observability" "$PY" -m pytest "$WROOT/observability/tests" -q
 
 echo "== Skills 评测入口（四类 SKILL.md + skill_test）=="
-"$PY" "$WROOT/skills/skill_test.py"
-"$PY" "$WROOT/skills/qc-standard/skill_test.py"
-"$PY" "$WROOT/skills/coach-scenario/skill_test.py"
-"$PY" "$WROOT/skills/regression-verify/skill_test.py"
+# 避免向 venv 写 __pycache__（写保护环境用 -B + pycache 重定向）
+export PYTHONDONTWRITEBYTECODE=1
+export PYTHONPYCACHEPREFIX="${SERVEVO_PYCACHE:-$TMPDIR/servevo-pycache}"
+"$PY" -B "$WROOT/skills/skill_test.py"
+MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/eval" "$PY" -B "$WROOT/skills/qc-standard/skill_test.py"
+MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/coach;$WROOT/eval;$WROOT/rag" "$PY" -B "$WROOT/skills/coach-scenario/skill_test.py"
+MSYS2_ARG_CONV_EXCL='*' PYTHONPATH="$WROOT/regression;$WROOT/rag;$WROOT/eval" "$PY" -B "$WROOT/skills/regression-verify/skill_test.py"
 
 echo "== Team 配置校验（team + 4 worker + SOUL）=="
 "$PY" "$WROOT/team/yamls/validate_team.py"
@@ -58,7 +61,7 @@ if [ "$FAST" = "1" ] || [ "${SERVEVO_FAST:-0}" = "1" ]; then
 fi
 
 echo "== 密钥枯死检查（禁止硬编码 key）=="
-if grep -rnE "sk-[A-Za-z0-9]{16,}|AGENTTEAMS_LLM_API_KEY=[A-Za-z0-9]" "$ROOT" --include="*.py" --include="*.md" --include="*.sh" 2>/dev/null | grep -v "\.venv\|/tmp/\|\.pytest_cache" ; then
+if grep -rnE "sk-[A-Za-z0-9]{16,}|qwen-[A-Za-z0-9]{16,}|lk_live_[A-Za-z0-9]{16,}|AGENTTEAMS_LLM_API_KEY=[A-Za-z0-9]" "$ROOT" --include="*.py" --include="*.md" --include="*.sh" 2>/dev/null | grep -v "\.venv\|/tmp/\|\.pytest_cache" ; then
     echo "!! 发现疑似硬编码密钥" >&2
     exit 1
 fi

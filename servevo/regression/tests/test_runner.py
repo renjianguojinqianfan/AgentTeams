@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest  # type: ignore
 
 from servevo_regression.compare import RunMetrics, compare
-from servevo_regression.runner import _match_key_points, run_testset
+from servevo_regression.runner import _match_key_points, _normalize, run_testset
 from servevo_regression.testset import TestQuestion, TestSet
 
 KB = r"E:\code\AgentTeams-source\AgentTeams\servevo\knowledge\product-knowledge\v1\references"
@@ -56,3 +56,19 @@ def test_match_key_points_all_hit():
     assert _match_key_points("K2 保修期 1 年，免费维修", ["维修", "1 年"]) is True
     assert _match_key_points("", ["要点"]) is False
     assert _match_key_points("任意答案", []) is True
+
+
+def test_match_key_points_normalizes_synonym_and_space():
+    # 同义词：质保 -> 保修；空格："1 年" -> "1年"
+    assert _match_key_points("整机质保 1 年", ["保修1年"]) is True
+    # 同义词 + 中文数字："质保期一年" -> "保修期1年"（key 含"期"才能子串命中）
+    assert _match_key_points("整机质保期一年", ["保修期1年"]) is True
+    # 中文数字归一："保修一年" -> "保修1年"
+    assert _match_key_points("保修一年", ["保修1年"]) is True
+    # 无关概念不误配：维修 不该被 保修 命中（不同词）
+    assert _match_key_points("提供维修服务", ["保修"]) is False
+
+
+def test_normalize_deterministic():
+    assert _normalize("1 年") == _normalize("一年")
+    assert _normalize("质保") == _normalize("保修")

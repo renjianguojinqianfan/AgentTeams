@@ -44,9 +44,14 @@ def main() -> int:
         for field in ["runtime", "model", "identity", "soul", "agents"]:
             if field not in spec:
                 issues.append(f"{name}: 缺 spec.{field}")
+        # 官方 CRD：identity/soul/agents 均为 string（内联内容），须防止嵌套对象回归
+        for field in ["identity", "soul", "agents"]:
+            val = spec.get(field)
+            if not isinstance(val, str):
+                issues.append(f"{name}: spec.{field} 应为 string（官方 CRD 类型），当前是 {type(val).__name__}")
         soul = spec.get("soul")
-        if soul and not (SOULS / f"{soul}.md").is_file():
-            issues.append(f"{name}: SOUL 文件 {soul}.md 不存在")
+        if soul and "# SOUL.md" not in soul:
+            issues.append(f"{name}: spec.soul 应内联 SOUL.md 内容（含 '# SOUL.md' 头）而非文件名")
 
     if issues:
         print("Team 配置校验失败:")

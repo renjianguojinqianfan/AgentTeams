@@ -107,6 +107,11 @@ class KnowledgeRegistry:
                 return True
         return False
 
+    def approved_for(self, version: str) -> Approval | None:
+        """返回该版本最近一条已批准的审批（无则 None）。"""
+        approved = [a for a in self.approvals if a.version == version and a.status == APPROVED]
+        return approved[-1] if approved else None
+
 
 def file_uri(root: str | Path, name: str, version: str) -> str:
     """构造 file:// 双轨 URI（Demo 通道）。"""

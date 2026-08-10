@@ -83,6 +83,7 @@ $env:AGENTTEAMS_MATRIX_E2EE = "0"
 | 不要用 API 热重载 | PUT `/api/agents/default/config/channels/matrix` 触发 zero-downtime reload，**重载后 watcher 和 channel 全死**，进程假死 | 避免 API reload；用"重启容器 + 改文件"的组合 |
 | 栈重建后房间损坏 | 发消息报 `non-create event for room of unknown version` | 旧房间状态损坏且 Manager 可能持有旧房间 ID。**重建 worker**（`agt delete worker x && agt create worker --name x`）生成新房间 |
 | Manager 消息格式泄漏 | 回复里出现 `sequence_number=... TextContent(...)` 原始对象 repr | copaw-worker 已知表面 bug，不影响链路，复赛前观察是否修复 |
+| **Worker YAML 的 identity/soul/agents 必须用块标量内联 string** | `agt apply -f servevo-cs.yaml` 报 `HTTP 400: cannot unmarshal array into Go struct field ...agents of type string` | 官方 CRD（`agentteams-controller/api/v1beta1/types.go`）的 `identity/soul/agents` 均为 **string**，`soul` 是 SOUL.md **内容**非文件名。须写成 `identity: \|` / `soul: \|` / `agents: \|` 多行块标量（参考 `servevo/team/yamls/*.yaml`）。嵌套对象/文件名引用会 apply 失败建队失败 |
 
 ---
 

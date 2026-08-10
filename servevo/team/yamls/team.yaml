@@ -5,9 +5,8 @@ kind: Team
 metadata:
   name: servevo
 spec:
-  # 协调上下文：Leader 心跳 / 团队通信策略
-  coordinatorConfig:
-    leaderHeartbeat: "30m"
+  # Leader 心跳检查间隔（官方 TeamSpec.heartbeatEvery；空=禁用）
+  heartbeatEvery: "30m"
   workerMembers:
     - name: servevo-leader
       role: team_leader

@@ -34,14 +34,45 @@ class RunResult:
     cases: list[CaseResult] = field(default_factory=list)
 
 
+# 同义词归一表（确定性：等价表述 -> 规范词），避免子串匹配因同义词漏判
+_SYNONYMS = {
+    "质保": "保修",
+    "质保期": "保修期",
+}
+
+# 中文数字 -> 阿拉伯数字（用于"一年" vs "1年" 归一）
+_CN_DIGITS = {
+    "零": "0", "一": "1", "两": "2", "二": "2", "三": "3", "四": "4",
+    "五": "5", "六": "6", "七": "7", "八": "8", "九": "9",
+}
+
+
+def _normalize(text: str) -> str:
+    """归一化文本以提升同义词/数字/空白匹配鲁棒性（确定性，可复现）。
+
+    - 去空白（"1 年" -> "1年"）
+    - 中文数字 -> 阿拉伯（"一年" -> "1年"）
+    - 等价同义词 -> 规范词（"质保" -> "保修"）
+    """
+    t = text.replace(" ", "").replace("\u3000", "")
+    # 中文数字（仅单字）归一
+    for cn, digit in _CN_DIGITS.items():
+        t = t.replace(cn, digit)
+    for src, dst in _SYNONYMS.items():
+        t = t.replace(src, dst)
+    return t
+
+
 def _match_key_points(answer: str, key_points: list[str]) -> bool:
     """确定性要点匹配：任一预期要点出现在答案中即视为命中该点。
 
+    匹配前对答案与要点做等价归一（去空白/中文数字/同义词），提升鲁棒性。
     全部要点命中（或要点为空时视为通过）→ 回归通过。不赌 LLM，可复现。
     """
     if not key_points:
         return bool(answer)
-    return all(kp in answer for kp in key_points)
+    norm_answer = _normalize(answer)
+    return all(_normalize(kp) in norm_answer for kp in key_points)
 
 
 async def run_testset(
