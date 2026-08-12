@@ -9,17 +9,19 @@ GOAI 2026 · Agent Infra 新智基座赛道参赛作品增量目录。
 ```
 servevo/
 ├── README.md            本文件
-├── deploy/              team.yaml + 4 份 Worker YAML（leader/cs/qc/coach，共用官方 copaw 镜像）
-├── image/               兜底预案（自定义镜像仅当需预装系统依赖时启用；默认不用，见 docs/P2.2）
-│   └── graphs/          迁移自底座的三图：rag / evaluation / adaptive
+├── CONTEXT.md           领域词汇表（质检/缺失证据/rubric/置信度）
+├── verify.sh            统一质量闸门（make verify：7 模块单测+Skills+Team+密钥+零侵入+闭环诚实性）
+├── .githooks/           pre-commit 快速绊线 / pre-push 全量闸门
+├── rag/ eval/ coach/ audit/ regression/ registry/ observability/
+│                        7 个独立模块（各带 servevo_* 包 + CLI + 单测）
+├── knowledge/           product-knowledge/v1（SKILL.md + references/{faq,products,warranty-policy}.md）
 ├── skills/              四类 Skill 包（各带独立评测入口 skill_test.py）
-│   ├── product-knowledge/
-│   ├── qc-standard/
-│   ├── coach-scenario/
-│   └── regression-verify/
-├── data/                50 题测试集 + 星辰咖啡机合成数据集 + 知识包 v1
-├── docs/                架构/审计/部署说明（引用《Windows部署踩坑手册》）
-└── scripts/             setup.sh 一键建队 + v1/v2 量化对照脚本
+│   ├── product-knowledge/  qc-standard/  coach-scenario/  regression-verify/
+├── team/                yamls/（team.yaml + 4 份 Worker YAML）+ souls/（4 SOUL.md）+ scripts/setup.sh
+├── regression/testset/  50 题测试集（cafe-testset-v1.json，含 5 预埋缺口题）
+├── scripts/             closedloop_e2e.py（进化闭环 e2e，真 LLM，v1/v2 诚实对照）
+├── docs/                规划 v3.2 + P 系列设计 + adr/ + agents/ + Windows踩坑手册 + 开发流程
+└── tmp/                 验证快照（答辩证据，不进 git）
 ```
 
 ## 双闭环

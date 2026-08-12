@@ -118,3 +118,12 @@ Manager → alice房间：派任务 + 要求回复后 @manager
 alice(qwen3.7-max)：收到 → LLM 作答 "1 + 1 = 2 ✅" → @manager
 Manager：确认收到 → admin 追问后转达 alice 原话 + 时间戳
 ```
+
+---
+
+## 八、servevo 质量闸门（verify）运行提示
+
+| 坑 | 现象 | 解法 |
+|---|---|---|
+| 裸 shell 无 TMPDIR | `bash servevo/verify.sh` 到 Skills 步骤报 `TMPDIR: unbound variable`（`set -u` + `${SERVEVO_PYCACHE:-$TMPDIR/...}`） | 补环境：`TMPDIR=/tmp bash servevo/verify.sh`，或预置 `SERVEVO_PYCACHE` |
+| 真实应答要点匹配漏判 | 价格题答作「价格为¥1999」已修（runner 匹配器 token 化 + 剥货币/markdown/中文标点）；仍有两类 **kp 数据设计局限**：compound kp 被连接词隔断（kp「运费星辰承担」对「运费**由**星辰承担」）、kp 概念不在应答（kp「以旧换新 300」对「补贴 ¥300」） | 属测试集 kp 措辞问题，非匹配器缺陷；改 kp 数据需独立评审（影响 passed 率与 v1/v2 判定） |
