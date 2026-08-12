@@ -61,14 +61,16 @@ $env:AGENTTEAMS_MATRIX_E2EE = "0"
 | qianwen CLI 登录 | `start`/`explorer` 拉起浏览器**可能无弹窗** | `--init-only` 拿 verification_url，**直接贴给用户手动打开**，然后 `--complete` 轮询；设备码有效期 300s，过期需重新 init |
 | Token Plan ≠ 免费额度 | — | sk-sp- key 走 token-plan.cn-beijing.maas.aliyuncs.com，是订阅制；本方案用的是标准端点 dashscope.aliyuncs.com 的按模型免费额度，两者勿混 |
 
-**模型额度策略（2026-08-07 快照，账号：人间过尽千帆）**
+**模型额度策略（2026-08-13 实测，账号：人间过尽千帆）**
 
 | 模型 | 余额 | 过期 | 用途规划 |
 |---|---|---|---|
-| qwen3.7-max | 1M | **8/20** | 当前全栈默认，先消耗 |
-| qwen3.7-plus | 1M | 9/01 | 次优先消耗 |
-| qwen3.8-max | 1M | 11/01 | **封存，留给赛程（复赛9/3、决赛9/22）** |
-| qwen3.7-flash | 596K | 10/23 | Worker 高频廉价档 |
+| qwen3.7-max | **0（已耗尽）** | 8/20 | 已耗尽，勿选 |
+| qwen3.7-plus | 999K | 9/01 | 次优先消耗（8 月；B5 全量 50 题对照用） |
+| qwen3.8-max | 999K | 11/01 | **封存，留给赛程（复赛9/3、决赛9/22）** |
+| qwen3.7-flash | 320K | 10/23 | Worker 高频廉价档（闭环/演示用，单次闭环约耗 80K，注意剩余） |
+
+> 查额度：`qianwen usage free-tier --format json`，过滤 `status==valid && unit==tokens`，按 `resetDate` 排序。
 
 ---
 
