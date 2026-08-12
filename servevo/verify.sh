@@ -60,6 +60,17 @@ if [ "$FAST" = "1" ] || [ "${SERVEVO_FAST:-0}" = "1" ]; then
     exit 0
 fi
 
+echo "== 闭环脚本诚实性检查（v1/v2 指标必须由真实应答推导，见 code-review HARD-1）=="
+if grep -nE "resolution_metrics\([^)]*=[0-9]+" "$ROOT/scripts/closedloop_e2e.py" 2>/dev/null; then
+    echo "!! closedloop_e2e.py 存在硬编码指标数字（违反'可验证的数据不是叙事'）" >&2
+    exit 1
+fi
+if ! grep -q '"missing_evidence"' "$ROOT/scripts/closedloop_e2e.py" 2>/dev/null; then
+    echo "!! closedloop_e2e.py 缺顶层缺失证据段（违反四准则③）" >&2
+    exit 1
+fi
+echo "闭环脚本诚实性检查通过 ✓"
+
 echo "== 密钥枯死检查（禁止硬编码 key）=="
 if grep -rnE "sk-[A-Za-z0-9]{16,}|qwen-[A-Za-z0-9]{16,}|lk_live_[A-Za-z0-9]{16,}|AGENTTEAMS_LLM_API_KEY=[A-Za-z0-9]" "$ROOT" --include="*.py" --include="*.md" --include="*.sh" 2>/dev/null | grep -v "\.venv\|/tmp/\|\.pytest_cache" ; then
     echo "!! 发现疑似硬编码密钥" >&2
