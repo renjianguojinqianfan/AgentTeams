@@ -67,11 +67,8 @@ from servevo_registry.registry import (  # noqa: E402
     KnowledgeVersion,
     LABEL_STABLE,
 )
-from servevo_regression.runner import _match_key_points  # noqa: E402
+from servevo_regression.runner import _is_escalation_only, _match_key_points  # noqa: E402
 from servevo_regression.compare import RunMetrics, compare  # noqa: E402
-
-# 转人工兜底信号（镜像 regression.runner 的 resolved 判定）
-_ESCALATION_MARKERS = ("转人工", "确证", "失败")
 
 # 类别 -> v2 references 目标文件
 _SECTION_FILES = {
@@ -97,10 +94,10 @@ def _section_for(category: str) -> str:
 def _answer_signals(answer: str, sources: list, key_points: list[str]) -> dict:
     """从真实应答推导确定性信号（镜像 regression.runner 语义，不赌 LLM）。
 
-    - resolved：服务闭环是否应答（有来源 且 非转人工/确证/失败兜底）
+    - resolved：服务闭环是否应答（有来源 且 非整体转人工兜底 且 非生成失败）
     - passed：知识对错（答案命中预期要点，确定性要点匹配）
     """
-    resolved = bool(sources) and not any(m in answer for m in _ESCALATION_MARKERS)
+    resolved = bool(sources) and not _is_escalation_only(answer) and "失败" not in answer
     passed = _match_key_points(answer, key_points) if resolved else False
     return {"resolved": resolved, "passed": passed}
 

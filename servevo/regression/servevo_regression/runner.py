@@ -93,6 +93,23 @@ def _match_key_points(answer: str, key_points: list[str]) -> bool:
     )
 
 
+def _is_escalation_only(answer: str) -> bool:
+    """答案是否主体为转人工兜底（服务闭环未应答）——区别于「含兜底步骤的完整解答」。
+
+    排查/政策类题目的正确答案常以「仍无法解决→转人工」收尾（F01/F03/F04 等，
+    且测试集 kp 本就把「转人工」列为合法要点，如 F02/R11/R14），
+    仅用「转人工」子串会把完整解答误判为未应答（与测试集设计矛盾）。
+    只有「以兜底/未收录措辞开头的短句」才视为整体未应答。
+    """
+    t = answer.strip()
+    if not t:
+        return True
+    return (
+        t.startswith(("转人工", "未收录", "无法", "未能", "抱歉", "暂无", "需要转人工"))
+        and len(t) <= 80
+    )
+
+
 async def run_testset(
     testset: TestSet,
     kb_dir: str,
@@ -121,11 +138,10 @@ async def run_testset(
         answer = result.get("answer", "")
         sources = result.get("sources", [])
         missing = result.get("missing_evidence", [])
-        # resolved = 服务闭环：有来源 且 非转人工/确证兜底 且 非生成失败
+        # resolved = 服务闭环：有来源 且 非整体转人工兜底 且 非生成失败
         resolved = (
             bool(sources)
-            and "转人工" not in answer
-            and "确证" not in answer
+            and not _is_escalation_only(answer)
             and "失败" not in answer
         )
         # passed = 知识对错：答案命中预期要点（独立信号）

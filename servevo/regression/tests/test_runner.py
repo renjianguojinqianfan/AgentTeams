@@ -5,7 +5,7 @@ from __future__ import annotations
 import pytest  # type: ignore
 
 from servevo_regression.compare import RunMetrics, compare
-from servevo_regression.runner import _match_key_points, _normalize, run_testset
+from servevo_regression.runner import _is_escalation_only, _match_key_points, _normalize, run_testset
 from servevo_regression.testset import TestQuestion, TestSet
 
 KB = r"E:\code\AgentTeams-source\AgentTeams\servevo\knowledge\product-knowledge\v1\references"
@@ -101,3 +101,14 @@ def test_normalize_strips_chinese_punct():
                              ["7 天", "未使用包装完好", "运费客户承担"]) is True
     # 数字中的 ASCII 点不被剥（1.2L 保留语义）
     assert _normalize("1.2L") == "1.2L"
+
+
+def test_is_escalation_only():
+    # 整体转人工兜底（短句 + 兜底措辞开头）→ 未应答
+    assert _is_escalation_only("抱歉，未能从知识库确证您的问题，为避免误导已转人工为您核实。") is True
+    assert _is_escalation_only("未收录，请转人工核实。") is True
+    assert _is_escalation_only("") is True
+    # 含兜底步骤的完整解答（F01 型：正确排查 + 转人工兜底收尾）→ 已应答
+    assert _is_escalation_only("检查水箱水位→断电重启→仍不行执行除垢程序；仍无法解决请转人工核实。") is False
+    # 以实质内容开头的政策说明（R14 型，kp 含转人工）→ 已应答
+    assert _is_escalation_only("按保修/退换货政策说明引导客户，必要时转人工售后确认。") is False
