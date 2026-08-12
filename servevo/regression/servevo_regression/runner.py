@@ -46,15 +46,28 @@ _CN_DIGITS = {
     "五": "5", "六": "6", "七": "7", "八": "8", "九": "9",
 }
 
+# 货币符号与 markdown 强调：真实 LLM 应答常带（"价格为 ¥1999" / "**¥1999**"），
+# 测试集 kp 为纯文本要点不含这些，剥离后要点匹配更贴近真实措辞
+_CURRENCY_CHARS = "¥￥$€元"
+# 中文标点：真实应答常以"未使用、包装完好"等措辞给出，kp 为纯文本无标点
+_CH_PUNCT = "、，。！？；：·「」『』（）【】"
+
 
 def _normalize(text: str) -> str:
     """归一化文本以提升同义词/数字/空白匹配鲁棒性（确定性，可复现）。
 
     - 去空白（"1 年" -> "1年"）
+    - 剥离货币符号与 markdown 强调（"¥1999" / "**¥1999**" -> "1999"）
+    - 剥离中文标点（"未使用、包装完好" -> "未使用包装完好"）
     - 中文数字 -> 阿拉伯（"一年" -> "1年"）
     - 等价同义词 -> 规范词（"质保" -> "保修"）
     """
     t = text.replace(" ", "").replace("\u3000", "")
+    for ch in _CURRENCY_CHARS:
+        t = t.replace(ch, "")
+    t = t.replace("**", "").replace("*", "")
+    for ch in _CH_PUNCT:
+        t = t.replace(ch, "")
     # 中文数字（仅单字）归一
     for cn, digit in _CN_DIGITS.items():
         t = t.replace(cn, digit)
@@ -64,15 +77,20 @@ def _normalize(text: str) -> str:
 
 
 def _match_key_points(answer: str, key_points: list[str]) -> bool:
-    """确定性要点匹配：任一预期要点出现在答案中即视为命中该点。
+    """确定性要点匹配：kp 按空白拆 token，逐 token 在答案中命中即视为命中该点。
 
-    匹配前对答案与要点做等价归一（去空白/中文数字/同义词），提升鲁棒性。
-    全部要点命中（或要点为空时视为通过）→ 回归通过。不赌 LLM，可复现。
+    真实 LLM 应答常以「价格为 ¥1999」「免费维修，运费由星辰承担」等自然措辞给出；
+    多要点 kp（如「价格 1999」）若要求整串连续子串，会被 为/¥/** 等隔断而漏判。
+    改为按空白拆 token 后逐 token 归一匹配（"价格"与"1999"都出现即命中），
+    对真实措辞更鲁棒，仍确定性可复现。全部 token 命中（或要点为空时视为通过）→ 回归通过。
     """
     if not key_points:
         return bool(answer)
     norm_answer = _normalize(answer)
-    return all(_normalize(kp) in norm_answer for kp in key_points)
+    return all(
+        all(_normalize(tok) in norm_answer for tok in kp.split())
+        for kp in key_points
+    )
 
 
 async def run_testset(

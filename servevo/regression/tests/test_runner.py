@@ -72,3 +72,32 @@ def test_match_key_points_normalizes_synonym_and_space():
 def test_normalize_deterministic():
     assert _normalize("1 年") == _normalize("一年")
     assert _normalize("质保") == _normalize("保修")
+
+
+def test_match_key_points_strips_currency_and_markdown():
+    # 真实 LLM 应答常带货币符号与 markdown 强调：价格/¥/** 不应阻断要点命中
+    assert _match_key_points("K1 咖啡机的价格为 **¥1999**", ["价格 1999"]) is True
+    assert _match_key_points("咖啡粉勺 ¥29", ["29"]) is True
+    assert _match_key_points("价格为 1999 元", ["价格 1999"]) is True
+
+
+def test_match_key_points_token_matching():
+    # 多要点 kp 按空白拆 token：被"为"隔断也命中（价格 + 1999 都出现即通过）
+    assert _match_key_points("星辰 K1 的价格为 ¥1999", ["价格 1999"]) is True
+    # 仍不误配：缺某 token 则不过
+    assert _match_key_points("K2 的价格是 ¥1999", ["价格 3299"]) is False
+
+
+def test_normalize_strips_currency():
+    assert _normalize("¥1999") == "1999"
+    assert _normalize("**¥1999**") == "1999"
+    assert _normalize("1999 元") == "1999"
+
+
+def test_normalize_strips_chinese_punct():
+    # 中文标点剥离：真实应答"未使用、包装完好" -> kp"未使用包装完好"可命中
+    assert _normalize("未使用、包装完好") == "未使用包装完好"
+    assert _match_key_points("签收后 7 天内，未使用、包装完好，运费客户承担",
+                             ["7 天", "未使用包装完好", "运费客户承担"]) is True
+    # 数字中的 ASCII 点不被剥（1.2L 保留语义）
+    assert _normalize("1.2L") == "1.2L"
