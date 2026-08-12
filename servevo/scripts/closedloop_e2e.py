@@ -31,8 +31,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 KB_V1 = ROOT / "knowledge" / "product-knowledge" / "v1"
+KB_V1_REFS = KB_V1 / "references"  # 知识包 .md 实际所在（load_knowledge 按此目录 glob *.md）
 KB_V2 = ROOT / "tmp" / "closedloop-kb-v2"  # v2 运行时物化（不进 git）
 TEST_PATH = ROOT / "regression" / "testset" / "cafe-testset-v1.json"
+REGISTRY_ROOT = ROOT / "tmp" / "closedloop-registry"  # 每次运行重置，保证 v1→v2 进化幂等可复现
 
 SAMPLE_NON_GAP = 2  # 采样普通题数（控制额度）
 SAMPLE_GAP = 1      # 采样缺口题数（控制额度）
@@ -212,7 +214,7 @@ async def run_closedloop() -> dict:
     trace: dict = {}
 
     # 1) v1：rag 客服应答（v1 知识）
-    rag_v1 = RagAgentGraph(kb_dir=str(KB_V1), llm=LlmClient())
+    rag_v1 = RagAgentGraph(kb_dir=str(KB_V1_REFS), llm=LlmClient())
     answered_v1 = await _answer_many(rag_v1, sample)
     trace["v1_answers"] = answered_v1
 
@@ -220,11 +222,11 @@ async def run_closedloop() -> dict:
     qa_v1 = [QaRecord(i, a["question"], a["category"], a["user_answer"])
              for i, a in enumerate(answered_v1)]
     report_v1 = await eval_graph.evaluate(chat_client, "closedloop-session-001", qa_v1,
-                                          reference_context=_reference_text(KB_V1))
+                                          reference_context=_reference_text(KB_V1_REFS))
     trace["v1_qc_report"] = _eval_report_dict(report_v1)
 
     # 3) coach 陪练回归（产出知识修订草案）
-    coach = CoachGraph(kb_dir=str(KB_V1))
+    coach = CoachGraph(kb_dir=str(KB_V1_REFS))
     cases = [
         {"scenario": a["question"], "category": a["category"], "answer": a["user_answer"]}
         for a in answered_v1
@@ -247,17 +249,19 @@ async def run_closedloop() -> dict:
     trace["v2_knowledge_diff"] = kb_diff
 
     # 5) v2：同测试集复跑（rag 复答 + eval 复评）
-    rag_v2 = RagAgentGraph(kb_dir=str(v2_dir), llm=LlmClient())
+    rag_v2 = RagAgentGraph(kb_dir=str(v2_dir / "references"), llm=LlmClient())
     answered_v2 = await _answer_many(rag_v2, sample)
     trace["v2_answers"] = answered_v2
     qa_v2 = [QaRecord(i, a["question"], a["category"], a["user_answer"])
              for i, a in enumerate(answered_v2)]
     report_v2 = await eval_graph.evaluate(chat_client, "closedloop-session-002", qa_v2,
-                                          reference_context=_reference_text(v2_dir))
+                                          reference_context=_reference_text(v2_dir / "references"))
     trace["v2_qc_report"] = _eval_report_dict(report_v2)
 
-    # 6) registry 发布 v2（URI 指向真实物化目录）
-    store = FileStorage(root=str(ROOT / "tmp" / "closedloop-registry"))
+    # 6) registry 发布 v2（URI 指向真实物化目录；先重置状态保证 v1→v2 幂等可复现）
+    if REGISTRY_ROOT.exists():
+        shutil.rmtree(REGISTRY_ROOT)
+    store = FileStorage(root=str(REGISTRY_ROOT))
     reg: KnowledgeRegistry = load_registry(store)
     reg.register(KnowledgeVersion("v1", "product-knowledge", f"file://{KB_V1}", approved=True))
     reg.promote("v1", LABEL_STABLE)
@@ -318,7 +322,12 @@ async def main_async() -> int:
     result = await run_closedloop()
     out_dir = ROOT / "tmp" / "closedloop-verify"
     out_dir.mkdir(parents=True, exist_ok=True)
-    fname = out_dir / f"{datetime.now(UTC).strftime('%Y-%m-%d')}-closedloop.json"
+    # 本地日期命名 + 防覆写（真 LLM 非幂等，同一天重跑一跑一份，不覆盖旧证据）
+    fname = out_dir / f"{datetime.now().strftime('%Y-%m-%d')}-closedloop.json"
+    n = 2
+    while fname.exists():
+        fname = out_dir / f"{datetime.now().strftime('%Y-%m-%d')}-closedloop-{n}.json"
+        n += 1
     fname.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     print("闭环完成，快照:", fname)
     print(json.dumps({
